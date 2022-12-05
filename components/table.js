@@ -2,14 +2,11 @@ import { BiEdit, BiTrashAlt } from "react-icons/bi";
 // import data from "../database/data.json";
 import { getUsers } from "../lib/helper";
 import { useQuery } from "react-query";
-import {useSelector} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleChangeAction } from "../redux/reducer";
 
 export default function Table() {
-
-const state = useSelector((state) => state)
-console.log("state",state)
-
-  const { isLoading, isError, data, error } = useQuery("users", getUsers);
+  const { isLoading, isError, data, error } = useQuery("userz", getUsers);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -52,10 +49,22 @@ console.log("state",state)
 }
 
 function Tr({ id, name, avatar, email, salary, date, status }) {
+  const visible = useSelector((state) => state.app.client.toggleForm);
+  const dispatch = useDispatch();
+
+  const onUpdate = () => {
+    dispatch(toggleChangeAction());
+    console.log(visible);
+  };
+
   return (
     <tr className="bg-gray-50 text-center">
       <td className="px-16 py-2 flex flex-row items-center">
-        <img src={avatar || "#"} alt="" className="w-8 h-8 rounded-full object-cover"/>
+        <img
+          src={avatar || "#"}
+          alt=""
+          className="w-8 h-8 rounded-full object-cover"
+        />
         <span className="text-center ml-2 font-semibold">
           {name || "Unknown"}
         </span>
@@ -71,15 +80,22 @@ function Tr({ id, name, avatar, email, salary, date, status }) {
       </td>
       <td className="px-16 py-2">
         <button className="cursor">
-          <span className={`${status === "Active" ? "bg-green-500" : "bg-red-500" } text-white px-5 py-1 rounded-full`}>
+          <span
+            className={`${
+              status === "Active" ? "bg-green-500" : "bg-red-500"
+            } text-white px-5 py-1 rounded-full`}
+          >
             {status || "Unknown"}
           </span>
         </button>
       </td>
       <td className="px-16 py-2 flex justify-around gap-5">
-        <button className="cursor">
+        {/* Edit button */}
+        <button className="cursor" onClick={onUpdate}>
           <BiEdit size={25} color={"rgb(34,197,94)"}></BiEdit>
         </button>
+
+        {/* Delete button */}
         <button className="cursor">
           <BiTrashAlt size={25} color={"rgb(244,63,94)"}></BiTrashAlt>
         </button>
