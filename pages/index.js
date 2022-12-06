@@ -3,13 +3,18 @@ import { BiUserPlus } from "react-icons/bi";
 import Table from "../components/table";
 import Form from "../components/form";
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleChangeAction } from "../redux/reducer";
 
 export default function Home() {
-  const [visible, setVisible] = useState(false);
+  const visible = useSelector((state) => state.app.client.toggleForm);
+  const dispatch = useDispatch();
 
-  const handler = () =>{
-    setVisible(!visible);
-  }
+  console.log("visible =", visible);
+
+  const handler = () => {
+    dispatch(toggleChangeAction());
+  };
 
   return (
     <div>
@@ -24,7 +29,10 @@ export default function Home() {
 
         <div className="container mx-auto flex justify-between py-5 border-b">
           <div className="left flex gap-3">
-            <button onClick={handler} className="flex items-center bg-indigo-500 text-white px-4 py-2 border rounded-md hover:bg-indigo-600">
+            <button
+              onClick={handler}
+              className="flex items-center bg-indigo-500 text-white px-4 py-2 border rounded-md hover:bg-indigo-600"
+            >
               Add Employee
               <span className="p-1">
                 <BiUserPlus size={23}></BiUserPlus>
@@ -33,9 +41,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="container mx-auto">
-         {visible === true && <Form />}
-        </div>
+        <div className="container mx-auto">{visible === true && <Form />}</div>
 
         <div className="container mx-auto">
           <Table />

@@ -3,24 +3,18 @@ import { BiPlus } from "react-icons/bi";
 import Success from "./success";
 import Error from "./error";
 import { useQueryClient, useMutation, QueryClient } from "react-query";
-import { addUser,getUsers } from "../lib/helper";
+import { addUser, getUsers } from "../lib/helper";
 
-const formReducer = (state, event) => {
-  return {
-    ...state,
-    [event.target.name]: event.target.value,
-  };
-};
-
-export default function AddUserForm() {
-  const queryClient = useQueryClient()
-  const [formData, setFormData] = useReducer(formReducer, {});
+export default function AddUserForm({ formData, setFormData, formId }) {
+  const queryClient = useQueryClient();
   const addMutation = useMutation(addUser, {
     onSuccess: () => {
       // Automatically update data at frontend
-      queryClient.prefetchQuery('userz',getUsers)
+      queryClient.prefetchQuery("userz", getUsers);
     },
   });
+
+  console.log("formIdfromAddUser", formId);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -51,6 +45,7 @@ export default function AddUserForm() {
   if (addMutation.isError)
     return <Error message={addMutation.error.message}></Error>;
   if (addMutation.isSuccess) return <Success message={"Added Succesfully"} />;
+
   return (
     <form className="grid lg:grid-cols-2 w-4/6 gap-4" onSubmit={handleSubmit}>
       <div className="input-type">
