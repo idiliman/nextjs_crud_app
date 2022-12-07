@@ -30,7 +30,7 @@ export default function UpdateUserForm({ formId, formData, setFormData }) {
   const { name, avatar, salary, date, email, status } = data;
   const [firstname, lastname] = name ? name.split(" ") : formData;
 
-  //
+  // Submit form fn
   const handleSubmit = async (e) => {
     e.preventDefault();
 

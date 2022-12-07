@@ -12,25 +12,27 @@ export default function Home() {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
+  // toggleChangeAction
   const visible = useSelector((state) => state.app.client.toggleForm);
   const deletedId = useSelector((state) => state.app.client.deletedId);
 
   // Call mutation (communicate with backend) and specify delete function
-  const deleteMutation = useMutation((data) => deleteUser(userId), {
+  const deleteMutation = useMutation((userId) => deleteUser(userId), {
     onSuccess: async (data) => {
       queryClient.prefetchQuery("userz", getUsers);
     },
   });
 
-  console.log("visible =", visible);
+  // console.log("visible at index =", visible);
 
   const handler = () => {
+    //Dispatch (trigger event)
     dispatch(toggleChangeAction());
   };
 
   const deleteHandler = async () => {
-    console.log(':)',deletedId);
-    // await deleteMutation.mutate();
+    console.log('Bye :(',deletedId);
+    await deleteMutation.mutate(deletedId);
   };
 
   const cancelHandler = () => {};
