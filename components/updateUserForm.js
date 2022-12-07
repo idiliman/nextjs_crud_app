@@ -30,11 +30,12 @@ export default function UpdateUserForm({ formId, formData, setFormData }) {
   const { name, avatar, salary, date, email, status } = data;
   const [firstname, lastname] = name ? name.split(" ") : formData;
 
+  //
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     let userName = `${formData.firstname ?? firstname} ${
-      formData.lastname ??  lastname
+      formData.lastname ?? lastname
     }`;
 
     // Create a new object, (last param will overwrire any data eg:data, formData (this will overwrite data object))

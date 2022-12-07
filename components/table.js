@@ -3,7 +3,7 @@ import { BiEdit, BiTrashAlt } from "react-icons/bi";
 import { getUsers } from "../lib/helper";
 import { useQuery } from "react-query";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleChangeAction, updateAction } from "../redux/reducer";
+import { toggleChangeAction, updateAction, deleteAction } from "../redux/reducer";
 
 export default function Table() {
   const { isLoading, isError, data, error } = useQuery("userz", getUsers);
@@ -55,10 +55,15 @@ function Tr({ _id, name, avatar, email, salary, date, status }) {
   // Edit button fn
   const onUpdate = () => {
     dispatch(toggleChangeAction(_id));
-    if(visible) {
-      dispatch(updateAction(_id))
-      console.log('from table',_id)
+    if (visible) {
+      dispatch(updateAction(_id));
+      console.log("from table", _id);
     }
+  };
+
+  const onDelete = () => {
+    dispatch(deleteAction(_id));
+    console.log("from table, onDelete", _id);
   };
 
   return (
@@ -100,7 +105,7 @@ function Tr({ _id, name, avatar, email, salary, date, status }) {
         </button>
 
         {/* Delete button */}
-        <button className="cursor">
+        <button className="cursor" onClick={onDelete}>
           <BiTrashAlt size={25} color={"rgb(244,63,94)"}></BiTrashAlt>
         </button>
       </td>

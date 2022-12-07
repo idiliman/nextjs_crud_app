@@ -1,5 +1,5 @@
 import { createListenerMiddleware } from "@reduxjs/toolkit";
-import { toggleChangeAction, updateAction } from "./reducer";
+import { toggleChangeAction, updateAction, deleteAction } from "./reducer";
 
 const listenerMiddleware = createListenerMiddleware();
 

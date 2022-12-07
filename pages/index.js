@@ -1,20 +1,39 @@
 import Head from "next/head";
-import { BiUserPlus } from "react-icons/bi";
+import { BiUserPlus, BiCheck, BiX } from "react-icons/bi";
 import Table from "../components/table";
 import Form from "../components/form";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleChangeAction } from "../redux/reducer";
+import { useMutation, useQueryClient } from "react-query";
+import { deleteUser, getUsers } from "../lib/helper";
 
 export default function Home() {
-  const visible = useSelector((state) => state.app.client.toggleForm);
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
+
+  const visible = useSelector((state) => state.app.client.toggleForm);
+  const deletedId = useSelector((state) => state.app.client.deletedId);
+
+  // Call mutation (communicate with backend) and specify delete function
+  const deleteMutation = useMutation((data) => deleteUser(userId), {
+    onSuccess: async (data) => {
+      queryClient.prefetchQuery("userz", getUsers);
+    },
+  });
 
   console.log("visible =", visible);
 
   const handler = () => {
     dispatch(toggleChangeAction());
   };
+
+  const deleteHandler = async () => {
+    console.log(':)',deletedId);
+    // await deleteMutation.mutate();
+  };
+
+  const cancelHandler = () => {};
 
   return (
     <div>
@@ -39,6 +58,8 @@ export default function Home() {
               </span>
             </button>
           </div>
+          {/* {deletedId && deleteComponent({ deleteHandler, cancelHandler })} */}
+          {deleteComponent({ deleteHandler, cancelHandler })}
         </div>
 
         <div className="container mx-auto">{visible === true && <Form />}</div>
@@ -50,3 +71,29 @@ export default function Home() {
     </div>
   );
 }
+
+const deleteComponent = ({ deleteHandler, cancelHandler }) => {
+  return (
+    <div className="flex gap-5">
+      <button>Are you sure?</button>
+      <button
+        onClick={deleteHandler}
+        className="flex bg-red-500 text-white px-4 py-2 border rounded-md hover:bg-rose-500 hover:border-red-500 hover:text-gray-50"
+      >
+        Yes{" "}
+        <span className="px-1">
+          <BiX color="rgb(255 255 255)" size={25} />
+        </span>
+      </button>
+      <button
+        onClick={cancelHandler}
+        className="flex bg-green-500 text-white px-4 py-2 border rounded-md hover:bg-gree-500 hover:border-green-500 hover:text-gray-50"
+      >
+        No{" "}
+        <span className="px-1">
+          <BiCheck color="rgb(255 255 255)" size={25} />
+        </span>
+      </button>
+    </div>
+  );
+};
