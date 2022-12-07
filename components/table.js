@@ -55,10 +55,9 @@ function Tr({ _id, name, avatar, email, salary, date, status }) {
   // Edit button fn
   const onUpdate = () => {
     dispatch(toggleChangeAction(_id));
-    //
-    if (visible) {
-      dispatch(updateAction(_id));
-      console.log("from table", _id);
+    if(visible) {
+      dispatch(updateAction(_id))
+      console.log('from table',_id)
     }
   };
 

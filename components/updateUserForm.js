@@ -2,29 +2,48 @@ import { useReducer } from "react";
 import { BiBrush } from "react-icons/bi";
 import Success from "./success";
 import Error from "./error";
-import { useQuery } from "react-query";
-import { getUser } from "../lib/helper";
-import { isPlain } from "@reduxjs/toolkit";
+import { useQuery, useMutation, useQueryClient } from "react-query";
+import { getUser, getUsers, updateUser } from "../lib/helper";
 
 export default function UpdateUserForm({ formId, formData, setFormData }) {
+  // fetching the user data (single user)
   const { isLoading, isError, data, error } = useQuery(["userz", formId], () =>
     getUser(formId)
   );
+
+  const queryClient = useQueryClient();
+
+  // Responsible to communicate with the server
+  const UpdateMutation = useMutation((newData) => updateUser(formId, newData), {
+    onSuccess: async (data) => {
+      queryClient.prefetchQuery("userz", getUsers);
+      // queryClient.setQueryData('userz',(old) => [data])
+      // console.log("data updated", data);
+    },
+  });
 
   console.log("formIdfromUpUser", formId);
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;
-  
 
   const { name, avatar, salary, date, email, status } = data;
   const [firstname, lastname] = name ? name.split(" ") : formData;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (Object.keys(formData).length == 0)
-      return console.log("Don't have Form Data");
-    console.log(formData);
+
+    let userName = `${formData.firstname ?? firstname} ${
+      formData.lastname ??  lastname
+    }`;
+
+    // Create a new object, (last param will overwrire any data eg:data, formData (this will overwrite data object))
+    let updated = Object.assign({}, data, formData, { name: userName });
+    // if (Object.keys(formData).length == 0)
+    //   return console.log("Don't have Form Data");
+    console.log(updated);
+
+    await UpdateMutation.mutate(updated);
   };
 
   // if (Object.keys(formData).length > 0)
