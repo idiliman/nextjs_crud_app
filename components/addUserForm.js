@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import { BiPlus } from "react-icons/bi";
-import Success from "./success";
-import Error from "./error";
+import Success from "./Success";
+import Error from "./Error";
 import { useQueryClient, useMutation, QueryClient } from "react-query";
 import { addUser, getUsers } from "../lib/helper";
 

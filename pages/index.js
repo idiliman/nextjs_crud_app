@@ -4,7 +4,7 @@ import Table from "../components/table";
 import Form from "../components/form";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleChangeAction } from "../redux/reducer";
+import { toggleChangeAction,deleteAction,updateAction } from "../redux/reducer";
 import { useMutation, useQueryClient } from "react-query";
 import { deleteUser, getUsers } from "../lib/helper";
 
@@ -23,19 +23,23 @@ export default function Home() {
     },
   });
 
-  // console.log("visible at index =", visible);
+  console.log("visible at index =", visible);
 
-  const handler = () => {
+  const handler = async () => {
     //Dispatch (trigger event)
     dispatch(toggleChangeAction());
+    // dispatch(updateAction(undefined))
   };
 
   const deleteHandler = async () => {
     console.log('Bye :(',deletedId);
     await deleteMutation.mutate(deletedId);
+    await dispatch(deleteAction(null));
   };
 
-  const cancelHandler = () => {};
+  const cancelHandler = async () => {
+    await dispatch(deleteAction(null));
+  };
 
   return (
     <div>
@@ -60,12 +64,16 @@ export default function Home() {
               </span>
             </button>
           </div>
-          {/* {deletedId && deleteComponent({ deleteHandler, cancelHandler })} */}
-          {deleteComponent({ deleteHandler, cancelHandler })}
+          {deletedId && deleteComponent({ deleteHandler, cancelHandler })}
+          {/* {deleteComponent({ deleteHandler, cancelHandler })} */}
         </div>
 
-        <div className="container mx-auto">{visible === true && <Form />}</div>
+        {/* Form */}
+        <div className="container mx-auto">
+        {visible === true && <Form />}
+        </div>
 
+        {/* Table */}
         <div className="container mx-auto">
           <Table />
         </div>

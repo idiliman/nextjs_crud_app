@@ -3,7 +3,11 @@ import { BiEdit, BiTrashAlt } from "react-icons/bi";
 import { getUsers } from "../lib/helper";
 import { useQuery } from "react-query";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleChangeAction, updateAction, deleteAction } from "../redux/reducer";
+import {
+  toggleChangeAction,
+  updateAction,
+  deleteAction,
+} from "../redux/reducer";
 
 export default function Table() {
   const { isLoading, isError, data, error } = useQuery("userz", getUsers);
@@ -55,12 +59,16 @@ function Tr({ _id, name, avatar, email, salary, date, status }) {
 
   // Edit button fn
   const onUpdate = () => {
+    // This need to be true, for form to appear
+    // Pass _id to middleware to activate the update form ()
     dispatch(toggleChangeAction(_id));
-    if (visible) {
-      dispatch(updateAction(_id));
-      console.log("from table", _id);
-    }
+    // if (visible) {
+    //   dispatch(updateAction(_id));
+    //   console.log("from table to form", _id);
+    // }
   };
+
+  console.log("ToggleForm stats", visible);
 
   const onDelete = () => {
     dispatch(deleteAction(_id));
