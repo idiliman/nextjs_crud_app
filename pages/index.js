@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { BiUserPlus, BiCheck, BiX } from "react-icons/bi";
-import Table from "../components/table";
+import Table from "../components/Table";
 import Form from "../components/Form";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
