@@ -10,8 +10,9 @@ const formReducer = (state, event) => {
   };
 };
 
-export default function form() {
+export default function Form() {
   const [formData, setFormData] = useReducer(formReducer, {});
+  
   // UpdateAction
   const formId = useSelector((state) => state.app.client.formId);
 
