@@ -1,5 +1,5 @@
-import UpdateUserForm from "./updateUserForm";
-import AddUserForm from "./addUserForm";
+import UpdateUserForm from "./UpdateUserForm";
+import AddUserForm from "./AddUserForm";
 import { useSelector } from "react-redux";
 import { useReducer } from "react";
 
